@@ -3,7 +3,18 @@ const app = express();
 const port = 8080;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Static File
 const MongoClient = require("mongodb").MongoClient;
+app.use(express.static("public"));
+app.use("/css", express.static(__dirname + "public/css"));
+app.use("/js", express.static(__dirname + "public/js"));
+app.use("/image", express.static(__dirname + "public/image"));
+
+//Set Views
+app.set("views", "./views");
+app.set("view engine", "ejs");
+
 // 변수 하나 사용
 var db;
 
@@ -31,11 +42,15 @@ MongoClient.connect(
     });
   }
 );
-
-app.use(express.static("public"));
-app.use("/css", express.static(__dirname + "public/css"));
-app.use("/js", express.static(__dirname + "public/js"));
-app.use("/image", express.static(__dirname + "public/image"));
+app.get("/list", function (req, res) {
+  db.collection("post")
+    .find()
+    .toArray(function (err, result) {
+      console.log(result);
+      res.render("list.ejs", { posts : result });
+    });
+ 
+});
 
 app.get("", function (req, res) {
   res.send(__dirname + "index.html");
