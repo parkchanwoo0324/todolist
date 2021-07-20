@@ -29,10 +29,28 @@ MongoClient.connect(
 
     app.post("/add", function (req, res) {
       res.send("전송완료");
-      db.collection("post").insertOne(
-        { 제목: req.body.title, 날짜: req.body.day },
-        function (에러, 결과) {
-          console.log("저장완료");
+      db.collection("counter").findOne(
+        { name: "게시물 갯수" },
+        function (err, result) {
+          console.log(result.totalPost);
+          var 총게시물갯수 = result.totalPost;
+
+          db.collection("post").insertOne(
+            { _id: 총게시물갯수 + 1, 제목: req.body.title, 날짜: req.body.day },
+            function (에러, 결과) {
+              console.log("저장완료");
+              db.collection("counter").updateOne(
+                { name: "게시물 갯수" },
+                { $inc: { totalPost: 1 } },
+                function (err, result) {
+                  if (err) {
+                    return console.log(에러);
+                  }
+                  result
+                }
+              );
+            }
+          );
         }
       );
     });
@@ -47,9 +65,8 @@ app.get("/list", function (req, res) {
     .find()
     .toArray(function (err, result) {
       console.log(result);
-      res.render("list.ejs", { posts : result });
+      res.render("list.ejs", { posts: result });
     });
- 
 });
 
 app.get("", function (req, res) {
@@ -59,3 +76,6 @@ app.get("", function (req, res) {
 app.get("/write", function (요청, 응답) {
   응답.sendFile(__dirname + "/write.html");
 });
+app.delete("/delete", function (요청, 응답){
+  console.log(요청.body)
+})

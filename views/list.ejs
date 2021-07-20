@@ -15,11 +15,26 @@
   <body>
     <h4 class="container mt-4"><strong>글 작성페이지</strong></h4>
     <div class="container mt-3">
+ 
+    <ul class="list=group">
       <% for(let i=0; i < posts.length; i++) { %>
-      <h4>할일 제목 : <%= posts[i].제목 %></h4>
-      <p>할일 마감날짜 : <%= posts[i].날짜 %></p>
+      <li class="list-group-item">
+        <h4>할일 제목 : <%= posts[i].제목 %></h4>
+        <p>할일 마감날짜 : <%= posts[i].날짜 %></p>
+        <button>삭제</button>
+      </li>
       <% } %>
-    </div>
+    </ul>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>
+      $.ajax({
+        method:"Delete",
+        url:"/delete",
+        data:"1"
+      }).done(function (result){
+
+      })
+    </script>
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
   </body>
