@@ -6,6 +6,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Static File
 const MongoClient = require("mongodb").MongoClient;
+
 app.use(express.static("public"));
 app.use("/css", express.static(__dirname + "public/css"));
 app.use("/js", express.static(__dirname + "public/js"));
@@ -69,13 +70,19 @@ app.get("/list", function (req, res) {
     });
 });
 
-app.get("", function (req, res) {
-  res.send(__dirname + "index.html");
+app.get("/index", function (req, res) {
+  res.sendFile(__dirname + "/public/index.html");
 });
 
-app.get("/write", function (요청, 응답) {
-  응답.sendFile(__dirname + "/write.html");
+app.get("/write", function (req, res) {
+  res.sendFile(__dirname + "/public/write.html");
 });
+
 app.delete("/delete", function (요청, 응답){
-  console.log(요청.body)
+  console.log(요청.body);
+  요청.body._id = parseInt(요청.body._id);
+  console.log(요청.body_id)
+  db.collection("post").deleteOne(요청.body,function (에러, 결과) {
+      console.log("삭제완료");
+  })
 })
