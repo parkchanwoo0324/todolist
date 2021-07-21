@@ -47,7 +47,7 @@ MongoClient.connect(
                   if (err) {
                     return console.log(에러);
                   }
-                  result
+                  result;
                 }
               );
             }
@@ -78,11 +78,11 @@ app.get("/write", function (req, res) {
   res.sendFile(__dirname + "/public/write.html");
 });
 
-app.delete("/delete", function (요청, 응답){
+app.delete("/delete", function (요청, 응답) {
   console.log(요청.body);
   요청.body._id = parseInt(요청.body._id);
-  console.log(요청.body_id)
-  db.collection("post").deleteOne(요청.body,function (에러, 결과) {
-      console.log("삭제완료");
-  })
-})
+  db.collection("post").deleteOne(요청.body, function (에러, 결과) {
+    console.log("삭제완료");
+    응답.status(200).send({ message: "성공했습니다" });
+  });
+});

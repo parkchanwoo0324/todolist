@@ -21,19 +21,29 @@
       <li class="list-group-item">
         <h4>할일 제목 : <%= posts[i].제목 %></h4>
         <p>할일 마감날짜 : <%= posts[i].날짜 %></p>
-        <button>삭제</button>
+        <button class="delete" data-id="<%= posts[i]._id %>">삭제</button>
       </li>
       <% } %>
     </ul>
     <script src="js/jquery-3.6.0.min.js"></script>
     <script>
-      $.ajax({
+
+      $(".delete").click(function (e) {
+        var 글번호 = e.target.dataset.id;
+        var 지금누른거 = $(this);
+        $.ajax({
         method:"DELETE",
         url:"/delete",
-        data:{ _id : 1 }
+        data:{ _id : 글번호 }
       }).done(function (결과){
+console.log("성공했습니다")
+지금누른거.parent("li").fadeOut();
+      }).fail(function () {
 
       })
+      })
+
+   
     </script>
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
