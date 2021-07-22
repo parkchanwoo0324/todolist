@@ -55,7 +55,6 @@ MongoClient.connect(
         }
       );
     });
-
     app.listen(port, function () {
       console.log("listening on 8080");
     });
@@ -68,6 +67,7 @@ app.get("/list", function (req, res) {
       console.log(result);
       res.render("list.ejs", { posts: result });
     });
+    
 });
 
 app.get("/index", function (req, res) {
@@ -84,5 +84,12 @@ app.delete("/delete", function (요청, 응답) {
   db.collection("post").deleteOne(요청.body, function (에러, 결과) {
     console.log("삭제완료");
     응답.status(200).send({ message: "성공했습니다" });
+  });
+});
+
+app.get("/detail/:id", function (req, res) {
+  db.collection("post").findOne({ _id: parseInt(req.params.id)}, function (에러, 결과) {
+    console.log(결과);
+    res.render("detail.ejs", { data: 결과 });
   });
 });
